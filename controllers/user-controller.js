@@ -1,11 +1,13 @@
 const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
-const passport=require('passport');
 const bodyParser=require('body-parser')
 
 
+const secretCode = "fahfkjdkafdsfa"
 
-// const User1=require('../models/users');
+const UserModel = require('../models/users');
+
+
 // const key=require('../config/keys');
 
 
@@ -13,7 +15,52 @@ module.exports.testuser = function(req, res){
     return res.end('<h1>Fine haii...!</h1>')
 }
 
+module.exports.signUp = async (req , res)=>{
+    
+    try{
+        console.log(req.body)
+        const existingUser = await UserModel.findOne({email : req.body.email })
+       if (existingUser){
+        return res.status(400).json({message : "Email Already exists"})
+       }
+       const hashedPassword = await bcrypt.hash(req.body.password,10)
+       const result = await UserModel.create({
+                name:req.body.name,
+				email:req.body.email,
+				password: hashedPassword,
+				phoneNo: req.body.phoneNo,
+				address:req.body.address
+       })
+       res.status(500).json({user: result})
+       
+   console.log("user registered")
+   }
+   catch(error){
+        console.log(error)
+        res.status(500).json({message:"something went wrong.."})
+   }
 
+}
+
+
+module.exports.signIn = async (req , res)=>{
+    try{
+        const existingUser = await UserModel.findOne({email : req.body.email })
+        if (!existingUser){
+         return res.status(400).json({message : "User not found"})
+        }
+      const matchPassword = await bcrypt.compare(req.body.password,existingUser.password);
+        if(!matchPassword){
+            return res.status(404).json({message : "Invalid Credentials"})
+        }
+        const token = 'Bearer ' + jwt.sign({email : existingUser.email , id : existingUser._id },secretCode );
+        res.status(201).json({ user : existingUser, token : token})
+    }
+    catch(error){
+        console.log(error)
+        res.status(500).json({message:"something went wrong.."})
+   }
+}
 
 
 
