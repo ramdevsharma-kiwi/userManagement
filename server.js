@@ -1,13 +1,16 @@
 const express = require('express');
+const bodyParser=require('body-parser')
+const passport=require('passport');
+const cookieParser=require('cookie-parser');
 
 
 const db  = require('./config/mongoose')
 const app = express();
 const port = 8000;
 
+app.use(bodyParser.urlencoded());
 
-app.use(express.urlencoded());
-
+app.use(bodyParser.json());
 
 
 //   router 
