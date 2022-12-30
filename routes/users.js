@@ -1,5 +1,6 @@
 const jwt=require('jsonwebtoken');
 
+const auth = require("../middleware/auth")
 
 const express = require('express')
 const router = express.Router();
@@ -16,7 +17,12 @@ router.post("/sign-up",usersController.signUp);
 
 router.post("/sign-in",usersController.signIn);
 
-// router.get("/user-profile",usersController.userProfile,passport.authenticate('jwt',{session:false}));
+router.get("/view-profile",auth ,usersController.viewUsersProfile)
+
+// router.delete("/view-profile/:id",auth ,usersController.deleteProfile)
+
+// router.put("/view-profile/:id",auth ,usersController.editProfile)
+
 
 
 module.exports = router;

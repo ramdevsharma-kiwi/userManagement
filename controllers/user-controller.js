@@ -64,6 +64,11 @@ module.exports.signIn = async (req , res)=>{
 
 
 
+module.exports.viewUsersProfile = function (req,res){
+    console.log(req.userId)
+}
+
+
 // module.exports.signUp = function(req,res){
 // 	console.log(req.body)
 // 	User1.findOne({email:req.body.email})
