@@ -15,7 +15,7 @@ const signInSchema = joi.object({
 
 
 // to validate the register schema
-const signUpSchma = joi.object({
+const signUpSchema = joi.object({
     email : joi.string().required().email(),
     name : joi.string().min(3).max(20).required(),
     phoneNo: joi.string().min(9).max(14).required(),
@@ -36,7 +36,7 @@ module.exports.signUp = async (req , res)=>{
     const bool = signUpSchema.validate({
         name:req.body.name,
 				email:req.body.email,
-				password: hashedPassword,
+				password: req.body.password,
 				phoneNo: req.body.phoneNo,
 				address:req.body.address
 
