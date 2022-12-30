@@ -1,23 +1,51 @@
 const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
 const bodyParser=require('body-parser')
-
+const joi = require('joi');
 
 const secretCode = "fahfkjdkafdsfa"
 
 const UserModel = require('../models/users');
 
+// to validate the login Schema
+const signInSchema = joi.object({
+    email : joi.string().required().email(),
+    password : joi.string().required().min(6)
+})
 
-// const key=require('../config/keys');
 
+// to validate the register schema
+const signUpSchma = joi.object({
+    email : joi.string().required().email(),
+    name : joi.string().min(3).max(20).required(),
+    phoneNo: joi.string().min(9).max(14).required(),
+    address: joi.string().min(10).max(50).required(),
+    password: joi.string().min(6).required()
 
+})
+
+// to test the routers
 module.exports.testuser = function(req, res){
     return res.end('<h1>Fine haii...!</h1>')
 }
 
+
+// register function started 
+
 module.exports.signUp = async (req , res)=>{
-    
-    try{
+    const bool = signUpSchema.validate({
+        name:req.body.name,
+				email:req.body.email,
+				password: hashedPassword,
+				phoneNo: req.body.phoneNo,
+				address:req.body.address
+
+    })
+    if(bool.error != undefined){
+        res.send(bool.error.details[0].message);
+       }
+    else{ 
+          try{
         console.log(req.body)
         const existingUser = await UserModel.findOne({email : req.body.email })
        if (existingUser){
@@ -40,10 +68,23 @@ module.exports.signUp = async (req , res)=>{
         res.status(500).json({message:"something went wrong.."})
    }
 
-}
+}}
 
+
+// -----------
+
+
+
+
+//  Login function
 
 module.exports.signIn = async (req , res)=>{
+    const bool = signInSchema.validate({email : req.body.email , password : req.body.password});
+   if(bool.error != undefined){
+    res.send(bool.error.details[0].message);
+   }
+   else
+   {
     try{
         const existingUser = await UserModel.findOne({email : req.body.email })
         if (!existingUser){
@@ -61,6 +102,8 @@ module.exports.signIn = async (req , res)=>{
         res.status(500).json({message:"something went wrong.."})
    }
 }
+}
+// ------------
 
 
 
@@ -76,6 +119,8 @@ module.exports.viewUsersProfile = async (req,res)=>{
    }
 }
 
+
+// --------
 
  module.exports.editProfile = async (req,res)=>{
     const id = req.params.id;
@@ -96,7 +141,7 @@ module.exports.viewUsersProfile = async (req,res)=>{
         res.status(500).json({message:"something went wrong.."})
     }
  } 
-
+// ---------
 
  module.exports.deleteProfile = async (req,res)=>{
     const id = req.params.id;
@@ -112,7 +157,7 @@ module.exports.viewUsersProfile = async (req,res)=>{
  }
 
 
-
+// ---------------
 // module.exports.signUp = function(req,res){
 // 	console.log(req.body)
 // 	User1.findOne({email:req.body.email})
