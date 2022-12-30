@@ -64,9 +64,53 @@ module.exports.signIn = async (req , res)=>{
 
 
 
-module.exports.viewUsersProfile = function (req,res){
-    console.log(req.userId)
+module.exports.viewUsersProfile = async (req,res)=>{
+    try{
+        const user1 = await UserModel.findById({_id:req.userId})
+        res.status(200).json(user1)
+
+    }
+    catch(error){
+        console.log(error)
+        res.status(500).json({message:"something went wrong.."})
+   }
 }
+
+
+ module.exports.editProfile = async (req,res)=>{
+    const id = req.params.id;
+    const hashedPassword = await bcrypt.hash(req.body.password,10)
+    const newuser ={
+                name:req.body.name,
+				email:req.body.email,
+				password: hashedPassword,
+				phoneNo: req.body.phoneNo,
+				address:req.body.address
+    }
+    try{
+        await UserModel.findByIdAndUpdate(id,newuser,{new : true})
+        res.status(200).json({message:"user details updated"})
+    }
+    catch(error){
+        console.log(error)
+        res.status(500).json({message:"something went wrong.."})
+    }
+ } 
+
+
+ module.exports.deleteProfile = async (req,res)=>{
+    const id = req.params.id;
+    try{
+
+         await UserModel.findByIdAndRemove(id)
+        res.status(202).json({message:" user deleted"})
+    }
+    catch(error){
+        console.log(error)
+        res.status(500).json({message:"something went wrong.."})
+    }
+ }
+
 
 
 // module.exports.signUp = function(req,res){

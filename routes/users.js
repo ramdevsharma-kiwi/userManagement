@@ -19,9 +19,9 @@ router.post("/sign-in",usersController.signIn);
 
 router.get("/view-profile",auth ,usersController.viewUsersProfile)
 
-// router.delete("/view-profile/:id",auth ,usersController.deleteProfile)
+router.delete("/view-profile/:id",auth,usersController.deleteProfile)
 
-// router.put("/view-profile/:id",auth ,usersController.editProfile)
+router.put("/view-profile/:id",auth ,usersController.editProfile)
 
 
 
