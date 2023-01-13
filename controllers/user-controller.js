@@ -33,6 +33,7 @@ module.exports.testuser = function(req, res){
 // register function started 
 
 module.exports.signUp = async (req , res)=>{
+    console.log('req.body',req.body)
     const bool = signUpSchema.validate({
         name:req.body.name,
 				email:req.body.email,

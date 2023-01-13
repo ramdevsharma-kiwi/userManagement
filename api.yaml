@@ -1,0 +1,57 @@
+swagger: "2.0"
+info:
+  title: User Management System
+  description: this is description
+  version: 1.0
+  contact: 
+    email: ram.sharma@kiwitech.com
+  servers:
+    -url: "http://localhost:8000"
+    -description: this is local server
+
+
+schemes: [http,https]
+
+paths:
+  /users/test:
+    get:
+      summary: To test the user page 
+      description: User Management System. It is user's page
+      tags:
+      - test
+      responses: 
+        '200':
+          description: OK
+
+  /users/sign-up:
+    post:
+      summary: To register the new user
+      description: Register the user using email, name, phoneNo, address, password 
+      tags:
+      - Register User
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: email
+          required: true
+        - in: formData
+          name: name
+          required: true
+        - in: formData
+          name: phoneNo
+          required: true
+        - in: formData  
+          name: address
+          required: true
+        - in: formData  
+          name: password
+          required: true
+      responses: 
+        '200':
+          description: OK
+          
+
+      
+
+  
