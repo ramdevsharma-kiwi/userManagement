@@ -80,6 +80,7 @@ module.exports.signUp = async (req , res)=>{
 //  Login function
 
 module.exports.signIn = async (req , res)=>{
+     console.log('req.body',req.body)
     const bool = signInSchema.validate({email : req.body.email , password : req.body.password});
    if(bool.error != undefined){
     res.send(bool.error.details[0].message);

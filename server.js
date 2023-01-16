@@ -3,13 +3,19 @@ const bodyParser=require('body-parser')
 const swaggerUI = require('swagger-ui-express')
 const YAML = require('yamljs')
 const swaggerJsDocs = YAML.load('./api.yaml')
+const db  = require('./config/mongoose')
 
 const app = express();
 const port = 8000;
 
+// app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.json());
+
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDocs))
 
-app.use(bodyParser.urlencoded({ extended: true }));
+
 
 //   router 
 app.use('/',require('./routes/index'));

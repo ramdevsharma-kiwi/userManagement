@@ -51,7 +51,26 @@ paths:
         '200':
           description: OK
           
-
+# to login the user account
+  /users/sign-in:
+    post:
+      summary: To login the user
+      description: Login the user account
+      tags:
+      - login
+      content:
+        - application/json:
+      parameters:
+        - in: formData
+          name: email
+          required: true
+        - in: formData  
+          name: password
+          required: true      
+      responses: 
+        '200':
+          description: OK
+        
       
 
   
